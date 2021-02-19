@@ -1,0 +1,177 @@
+﻿<mah:MetroWindow x:Class="ProjectSpotlight.MainWindow"
+				 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+				 Title="Spotlight images" Height="450" Width="600"
+				 ResizeMode="CanResizeWithGrip" 
+				 Loaded="Window_Loaded" Closing="Window_Closing" Closed="Window_Closed" Left="900" Top="50">
+	<Window.Resources>
+		<Style x:Key="Recycle bin Style" TargetType="Image" >
+			<Setter Property="Source" >
+				<Setter.Value>
+					<DrawingImage>
+						<DrawingImage.Drawing>
+							<DrawingGroup ClipGeometry="M0,0 V512 H512 V0 H0 Z">
+								<DrawingGroup Opacity="1">
+									<GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, FallbackValue=Magenta}" 
+												 Geometry="F1 M512,512z M0,0z M444.852,66.908L345.513,66.908 345.513,47.04C345.513,25.097,327.721,7.304,305.777,7.304L206.438,7.304C184.494,7.304,166.702,25.097,166.702,47.04L166.702,66.908 67.363,66.908 67.363,86.776 87.833,86.776 107.72,464.265C107.72,486.209,125.512,504.001,147.456,504.001L366.002,504.001C387.946,504.001,405.738,486.209,405.738,464.265L425.276,86.776 444.853,86.776 444.853,66.908z M186.57,47.04C186.57,36.078,195.496,27.172,206.438,27.172L305.777,27.172C316.739,27.172,325.645,36.078,325.645,47.04L325.645,66.908 186.57,66.908 186.57,47.04z M385.908,463.236L385.869,463.741 385.869,464.265C385.869,475.208,376.963,484.133,366.001,484.133L147.455,484.133C136.513,484.133,127.587,475.208,127.587,464.265L127.587,463.741 127.568,463.218 107.72,86.776 405.389,86.776 385.908,463.236z" />
+									<GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, FallbackValue=Magenta}" >
+										<GeometryDrawing.Geometry>
+											<RectangleGeometry RadiusX="0" RadiusY="0" Rect="246.173,126.511,19.868,317.885" />
+										</GeometryDrawing.Geometry>
+									</GeometryDrawing>
+									<GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, FallbackValue=Magenta}" 
+												 Geometry="F1 M512,512z M0,0z M206.884,443.757L206.884,443.757 186.551,126.493 166.722,127.753 187.056,445.017z" />
+									<GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, FallbackValue=Magenta}" 
+												 Geometry="F1 M512,512z M0,0z M345.649,127.132L345.649,127.132 325.82,125.891 305.777,443.776 325.606,445.017z" />
+								</DrawingGroup>
+							</DrawingGroup>
+						</DrawingImage.Drawing>
+					</DrawingImage>
+				</Setter.Value>
+			</Setter>
+		</Style>
+					
+		<DrawingImage x:Key="Recycle bin DrawingImage" >
+			<DrawingImage.Drawing>
+				<DrawingGroup ClipGeometry="M0,0 V512 H512 V0 H0 Z">
+					<DrawingGroup Opacity="1">
+						<GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Control}, FallbackValue=Magenta}" 
+										 Geometry="F1 M512,512z M0,0z M444.852,66.908L345.513,66.908 345.513,47.04C345.513,25.097,327.721,7.304,305.777,7.304L206.438,7.304C184.494,7.304,166.702,25.097,166.702,47.04L166.702,66.908 67.363,66.908 67.363,86.776 87.833,86.776 107.72,464.265C107.72,486.209,125.512,504.001,147.456,504.001L366.002,504.001C387.946,504.001,405.738,486.209,405.738,464.265L425.276,86.776 444.853,86.776 444.853,66.908z M186.57,47.04C186.57,36.078,195.496,27.172,206.438,27.172L305.777,27.172C316.739,27.172,325.645,36.078,325.645,47.04L325.645,66.908 186.57,66.908 186.57,47.04z M385.908,463.236L385.869,463.741 385.869,464.265C385.869,475.208,376.963,484.133,366.001,484.133L147.455,484.133C136.513,484.133,127.587,475.208,127.587,464.265L127.587,463.741 127.568,463.218 107.72,86.776 405.389,86.776 385.908,463.236z" />
+						<GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Control}, FallbackValue=Magenta}" >
+							<GeometryDrawing.Geometry>
+								<RectangleGeometry RadiusX="0" RadiusY="0" Rect="246.173,126.511,19.868,317.885" />
+							</GeometryDrawing.Geometry>
+						</GeometryDrawing>
+						<GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Control}, FallbackValue=Magenta}" 
+										 Geometry="F1 M512,512z M0,0z M206.884,443.757L206.884,443.757 186.551,126.493 166.722,127.753 187.056,445.017z" />
+						<GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Control}, FallbackValue=Magenta}" 
+										 Geometry="F1 M512,512z M0,0z M345.649,127.132L345.649,127.132 325.82,125.891 305.777,443.776 325.606,445.017z" />
+					</DrawingGroup>
+				</DrawingGroup>
+			</DrawingImage.Drawing>
+		</DrawingImage>
+	</Window.Resources>
+
+	<mah:MetroWindow.LeftWindowCommands>
+		<mah:WindowCommands>
+			<Button Name="BackButton" Content="ß " FontFamily="Wingdings" Visibility="Collapsed" Click="WindowBackButton_Click" />
+		</mah:WindowCommands>
+	</mah:MetroWindow.LeftWindowCommands>
+
+	<mah:MetroWindow.RightWindowCommands>
+		<mah:WindowCommands>
+			<Button Name="TestsButton" Content="TEST" Click="TestsButton_Click" />
+		</mah:WindowCommands>
+	</mah:MetroWindow.RightWindowCommands>
+
+	<Grid Name="LayoutRoot" >
+		<ListView Name="SmallPicturesContainer" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BindingGroup="{Binding ImageOrientation}" >
+			<ListView.ItemsPanel>
+				<ItemsPanelTemplate>
+					<WrapPanel/>
+				</ItemsPanelTemplate>
+			</ListView.ItemsPanel>
+			<ListView.ItemContainerStyle>
+				<Style TargetType="{x:Type ListViewItem}">
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate>
+								<Border MaxWidth="208" MaxHeight="151" Padding="8" SnapsToDevicePixels="True" 
+										Background="White" BorderBrush="#7F000000" BorderThickness="1" >
+									<DockPanel>
+										<!--<TextBlock DockPanel.Dock="Bottom" Margin="4 12 4 4" HorizontalAlignment="Center" Text="{Binding FileName}" />-->
+										<TextBlock DockPanel.Dock="Bottom" Margin="4 12 4 4" HorizontalAlignment="Center" />
+										<Image Source="{Binding Image}" />
+									</DockPanel>
+								</Border>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+					<Setter Property="Margin" Value="5 10" />
+					<Setter Property="Effect" >
+						<Setter.Value>
+							<DropShadowEffect Color="Black" Opacity="0.25" ShadowDepth="5" BlurRadius="2" />
+						</Setter.Value>
+					</Setter>
+					<EventSetter Event="PreviewMouseDoubleClick" Handler="ItemContainer_MouseDoubleClick" />
+				</Style>
+			</ListView.ItemContainerStyle>
+			<ListView.GroupStyle>
+				<GroupStyle>
+					<GroupStyle.HeaderTemplate>
+						<DataTemplate>
+							<Grid Margin="10 20 10 5" >
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="Auto" />
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Column="0" Margin="10 0 0 0" FontSize="18" FontWeight="DemiBold" Text="{Binding Name}" />
+
+								<Button Grid.Column="1" Foreground="Black" VerticalAlignment="Center" Click="DeleteGroupButton_Click" Cursor="Hand" Tag="{Binding Name, Mode=OneWay}" >
+									<Button.Template>
+										<ControlTemplate TargetType="Button" >
+											<Image Name="PART_Image" Width="16" Height="16" Style="{StaticResource Recycle bin Style}" Opacity="0.5" />
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsMouseOver" Value="True" >
+													<Setter TargetName="PART_Image" Property="Opacity" Value="0.8" />
+												</Trigger>
+												<Trigger Property="IsPressed" Value="True" >
+													<Setter TargetName="PART_Image" Property="Opacity" Value="1.0" />
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</Button.Template>
+								</Button>
+							</Grid>
+						</DataTemplate>
+					</GroupStyle.HeaderTemplate>
+				</GroupStyle>
+			</ListView.GroupStyle>
+		</ListView>
+
+		<Grid Name="CarouselContainer" Background="Black" Visibility="Collapsed" >
+			<mah:FlipView Name="Carousel" IsBannerEnabled="False" MouseHoverBorderEnabled="False"  KeyDown="Carousel_KeyDown"
+						  SelectedIndex="{Binding ElementName=SmallPicturesContainer, Path=SelectedIndex, Mode=TwoWay}" >
+				<mah:FlipView.ItemTemplate>
+					<DataTemplate>
+						<Image Source="{Binding Image}" />
+					</DataTemplate>
+				</mah:FlipView.ItemTemplate>
+				<mah:FlipView.RenderTransform>
+					<TransformGroup>
+						<ScaleTransform/>
+						<TranslateTransform/>
+					</TransformGroup>
+				</mah:FlipView.RenderTransform>
+			</mah:FlipView>
+
+			<Button Name="DeleteButton" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="20" Click="DeleteButton_Click" >
+				<Button.Template>
+					<ControlTemplate TargetType="Button" >
+						<Border Name="PART_Border" Background="#5000" BorderThickness="1" BorderBrush="#777" CornerRadius="4" Padding="10" >
+							<Image Width="20" Height="20" Style="{StaticResource Recycle bin Style}" />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True" >
+								<Setter TargetName="PART_Border" Property="BorderBrush" Value="#444" />
+							</Trigger>
+							<Trigger Property="IsPressed" Value="True" >
+								<Setter TargetName="PART_Border" Property="BorderBrush" Value="#000" />
+								<Setter TargetName="PART_Border" Property="Background" Value="#B000" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Button.Template>
+			</Button>
+		</Grid>
+
+		<TextBlock Name="Text1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="50 50 50 100" TextAlignment="Center" Visibility="Collapsed" >
+			<Run FontSize="55" Text="😟" />
+			<LineBreak/>
+			<LineBreak/>
+			<Run FontSize="20" Text="No new images found." />
+		</TextBlock>
+
+	</Grid>
+</mah:MetroWindow>
