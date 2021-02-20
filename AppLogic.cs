@@ -122,39 +122,59 @@ namespace ProjectSpotlight
 
 		public void GroupImagesByAspectRation()
 		{
-			for (int i = 0; i < NewItems.Count; i++)
-			{
-				string filePath = NewItems[i].FilePath;
+			var fails = new List<Tuple<Item, Exception>>();
 
+			var items = new Item[NewItems.Count];
+			NewItems.CopyTo(items, 0);
+					Random random = new Random();
+
+			foreach (Item item in items)
+			{
 				// Skips this file if it no longer exists.
-				if (!File.Exists(filePath))
+				if (!File.Exists(item.FilePath))
 					continue;
 
-				// Determines whether the image is a portrait one or a landscape one.
-				BitmapImage bi = NewItems[i].Image;
+				// Computes the new path for the current file.
+				string directory = item.ImageOrientation == ImageOrientation.Landscape ? "Landscape" : "Portrait";
+				string directoryPath = Path.Combine(rootDirectory, directory);
 
-				bool is_landscape = (bi.Width > bi.Height); // (image.Width == 1920); //
-
+				if (!Directory.Exists(directoryPath))
+					try
+					{
+						Directory.CreateDirectory(directoryPath);
+					}
+					catch (Exception ex)
+					{
+						fails.Add(new Tuple<Item, Exception>(item, ex));
+					}
 
 				// Computes the new path for the current file.
-				string newFilePath = Path.Combine(
-					rootDirectory,
-					(is_landscape ? "Landscape" : "Portrait"),
-					Path.GetFileName(filePath));
+				string fileName = Path.GetFileName(item.FilePath);
+				string newFilePath = Path.Combine(directoryPath, fileName);
 
 				// Moves the current file to the apropriate directory.
 				try
 				{
-					File.Move(filePath, newFilePath);
+#if DEBUG
+					if (random.NextDouble() < 0.7)
+						throw new Exception("This file is being used by another program.");
+#else
+					File.Move(item.FilePath, newFilePath);
+#endif
+					NewItems.Remove(item);
 				}
 				catch (Exception ex)
 				{
-					System.Windows.MessageBox.Show(
-						ex.Message,
-						"Error",
-						System.Windows.MessageBoxButton.OK,
-						System.Windows.MessageBoxImage.Error);
+					fails.Add(new Tuple<Item, Exception>(item, ex));
 				}
+			}
+
+
+			if (fails.Count != 0)
+			{
+				Exception exception = new Exception();
+				exception.Data.Add("fails", fails);
+				throw exception;
 			}
 		}
 

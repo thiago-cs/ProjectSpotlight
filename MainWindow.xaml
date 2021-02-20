@@ -2,9 +2,9 @@
 				 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 				 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 				 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-				 Title="Spotlight images" Height="450" Width="600"
-				 ResizeMode="CanResizeWithGrip" 
-				 Loaded="Window_Loaded" Closing="Window_Closing" Closed="Window_Closed" Left="900" Top="50">
+				 Title="Spotlight images" ResizeMode="CanResizeWithGrip" 
+				 Height="450" Width="600" Left="900" Top="50"
+				 Loaded="Window_Loaded" Closing="Window_Closing">
 	<Window.Resources>
 		<Style x:Key="Recycle bin Style" TargetType="Image" >
 			<Setter Property="Source" >

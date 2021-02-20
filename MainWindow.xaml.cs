@@ -3,13 +3,14 @@
 #endif
 
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-
+using MahApps.Metro.Controls.Dialogs;
 
 namespace ProjectSpotlight
 {
@@ -19,7 +20,7 @@ namespace ProjectSpotlight
 	public partial class MainWindow
 	{
 		#region Fields
-		//private bool forcedClose = false;
+		private bool forcedClose = false;
 		private FrameworkElement currentContainer = null;
 
 		// Animations for BigPicture control.
@@ -110,31 +111,60 @@ namespace ProjectSpotlight
 			}
 		}
 
-		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			//if (forcedClose)
-			//{ }
-			//else
-			//{
-			//	if (App.Logic.NewFiles.Count != 0)
-			//	{
-			//		e.Cancel = true;
-			//		forcedClose = true;
-			//	}
-			//}
-		}
+			if (forcedClose)
+			{
+				return;
+			}
 
-		private void Window_Closed(object sender, EventArgs e)
-		{
-#if !SIMULATION_MODE
-			App.Logic.GroupImagesByAspectRation();
-#endif
+			// Unless some logic below oposes, it is assumed that the window can be closed normally.
+			bool canClose = true;
+
+			// Is there any new images?
+			if (App.Logic.NewItems.Count != 0)
+			{
+				e.Cancel = true;
+
+				string message = App.Logic.NewItems.Count == 1 ?
+					"Do you want to keep the new image found?" :
+					"Do you want to keep the new images found?";
+
+				var dialogSettings = new MetroDialogSettings
+				{
+					AffirmativeButtonText = "Yes",
+					NegativeButtonText = "No",
+					DefaultButtonFocus = MessageDialogResult.Affirmative,
+				};
+
+				var result = await this.ShowMessageAsync(Title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+
+				if (result == MessageDialogResult.Affirmative)
+				{
+					await SaveRemainingItems();
+
+					if (App.Logic.NewItems.Count != 0)
+						canClose = false;
+				}
+				else
+					DiscardRemainingItems();
+
+				// If the "close window" process has been canceled for any reason
+				// but everyone agrees that the window can be closed now, then...
+				if (e.Cancel && canClose)
+				{
+					forcedClose = true;
+					Close();
+				}
+			}
 		}
 		#endregion Constructor and MainWindow events
 
 
 		#region Methods
+		
 		// UI Methods
+
 		private void ShowCarousel()
 		{
 			// 1. Sets the image to be displayed.
@@ -259,6 +289,13 @@ namespace ProjectSpotlight
 			return null;
 		}
 
+		private static Point GetElementOffset(Visual ancestor, FrameworkElement element)
+		{
+			return element.TransformToAncestor(ancestor).Transform(new Point(0, 0));
+		}
+
+		// Non-UI Methods
+
 		private static void RemoveItem(Item item)
 		{
 #if SIMULATION_MODE
@@ -275,9 +312,44 @@ namespace ProjectSpotlight
 #endif
 		}
 
-		private static Point GetElementOffset(Visual ancestor, FrameworkElement element)
+		private async Task SaveRemainingItems()
 		{
-			return element.TransformToAncestor(ancestor).Transform(new Point(0, 0));
+			var dialogSettings = new MetroDialogSettings
+			{
+				AffirmativeButtonText = "Try again",
+				NegativeButtonText = "Cancel",
+				DefaultButtonFocus = MessageDialogResult.Affirmative,
+			};
+
+			bool keepTrying;
+			do try
+				{
+					App.Logic.GroupImagesByAspectRation();
+					keepTrying = false;
+				}
+				catch (Exception ex)
+				{
+					var list = ex.Data["fails"] as System.Collections.Generic.List<Tuple<Item, Exception>>;
+					var message = $"Could not move {list.Count} file(s):";
+
+					foreach (var tuple in list)
+					{
+						var item = tuple.Item1;
+						var exception = tuple.Item2;
+						message += "\n" + item.FileName + "\t" + exception.Message;
+					}
+
+					var result = await this.ShowMessageAsync(Title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+
+					keepTrying = result == MessageDialogResult.Affirmative;
+				}
+			while (keepTrying);
+		}
+
+		private void DiscardRemainingItems()
+		{
+			for (int i = App.Logic.NewItems.Count - 1; i >= 0; i--)
+				RemoveItem(App.Logic.NewItems[i]);
 		}
 		#endregion Methods
 
