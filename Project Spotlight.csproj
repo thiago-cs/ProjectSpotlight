@@ -72,6 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\ViewModel.cs" />
     <Page Include="src\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -81,7 +82,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\AppLogic.cs" />
-    <Compile Include="src\Item.cs" />
+    <Compile Include="src\ImageOrientation.cs" />
+    <Compile Include="src\Model.cs" />
     <Compile Include="src\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

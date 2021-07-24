@@ -4,7 +4,7 @@ using System.Windows.Media.Imaging;
 
 namespace ProjectSpotlight
 {
-	public class Item
+	public class Model
 	{
 		#region Properties
 		public string FilePath { get; }
@@ -14,7 +14,7 @@ namespace ProjectSpotlight
 		#endregion Properties
 
 
-		public Item(string path)
+		public Model(string path)
 		{
 			// 
 			FilePath = path;
@@ -29,12 +29,5 @@ namespace ProjectSpotlight
 			// 
 			ImageOrientation = Image.PixelWidth < Image.PixelHeight ? ImageOrientation.Portrait : ImageOrientation.Landscape;
 		}
-	}
-
-
-	public enum ImageOrientation
-	{
-		Landscape,
-		Portrait,
 	}
 }

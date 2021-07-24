@@ -19,7 +19,7 @@ namespace ProjectSpotlight
 
 
 		#region Properties
-		public ObservableCollection<Item> NewItems { get; } = new ObservableCollection<Item>();
+		public ObservableCollection<Model> NewItems { get; } = new ObservableCollection<Model>();
 		#endregion Properties
 
 
@@ -91,7 +91,7 @@ namespace ProjectSpotlight
 
 				// 2.2.4. Saves this file to a list and copies it to the temporary directory.
 				file.CopyTo(newFilePath);
-				NewItems.Add(new Item(newFilePath));
+				NewItems.Add(new Model(newFilePath));
 			}
 
 
@@ -100,7 +100,7 @@ namespace ProjectSpotlight
 			{
 				StringBuilder additional_text = new StringBuilder();
 
-				foreach (Item item in NewItems)
+				foreach (Model item in NewItems)
 					additional_text.AppendLine(Path.GetFileNameWithoutExtension(item.FilePath));
 
 				using (StreamWriter writer = historyFile.AppendText())
@@ -117,18 +117,18 @@ namespace ProjectSpotlight
 			var fileNames = Directory.GetFiles(rootDirectory, "*.jpg");
 
 			foreach (string fileName in fileNames)
-				App.Logic.NewItems.Add(new Item(fileName));
+				App.Logic.NewItems.Add(new Model(fileName));
 		}
 
 		public void GroupImagesByAspectRation()
 		{
-			var fails = new List<Tuple<Item, Exception>>();
+			var fails = new List<Tuple<Model, Exception>>();
 
-			var items = new Item[NewItems.Count];
+			var items = new Model[NewItems.Count];
 			NewItems.CopyTo(items, 0);
 					Random random = new Random();
 
-			foreach (Item item in items)
+			foreach (Model item in items)
 			{
 				// Skips this file if it no longer exists.
 				if (!File.Exists(item.FilePath))
@@ -145,7 +145,7 @@ namespace ProjectSpotlight
 					}
 					catch (Exception ex)
 					{
-						fails.Add(new Tuple<Item, Exception>(item, ex));
+						fails.Add(new Tuple<Model, Exception>(item, ex));
 					}
 
 				// Computes the new path for the current file.
@@ -165,7 +165,7 @@ namespace ProjectSpotlight
 				}
 				catch (Exception ex)
 				{
-					fails.Add(new Tuple<Item, Exception>(item, ex));
+					fails.Add(new Tuple<Model, Exception>(item, ex));
 				}
 			}
 
@@ -178,7 +178,7 @@ namespace ProjectSpotlight
 			}
 		}
 
-		public void RemoveItem(Item item, bool removeFile)
+		public void RemoveItem(Model item, bool removeFile)
 		{
 			if (item == null || !App.Logic.NewItems.Contains(item))
 				return;

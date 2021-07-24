@@ -42,7 +42,7 @@ namespace ProjectSpotlight
 			if (SmallPicturesContainer.ItemsSource == null)
 			{
 				CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(App.Logic.NewItems);
-				view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Item.ImageOrientation)));
+				view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Model.ImageOrientation)));
 
 				//SmallPicturesContainer.ItemsSource = App.Logic.NewItems;
 				SmallPicturesContainer.ItemsSource = view;
@@ -225,7 +225,7 @@ namespace ProjectSpotlight
 			// 1.1. 
 			currentContainer = GetSelectedItemContainer();
 			FrameworkElement image = GetImageControl(currentContainer);
-			BitmapImage bitmap = (SmallPicturesContainer.SelectedItem as Item).Image;
+			BitmapImage bitmap = (SmallPicturesContainer.SelectedItem as Model).Image;
 
 			// 1.2. 
 			double ratioBitmapToBigImage = Math.Min(LayoutRoot.ActualHeight / bitmap.PixelHeight, LayoutRoot.ActualWidth / bitmap.PixelWidth);
@@ -296,7 +296,7 @@ namespace ProjectSpotlight
 
 		// Non-UI Methods
 
-		private static void RemoveItem(Item item)
+		private static void RemoveItem(Model item)
 		{
 #if SIMULATION_MODE
 			App.Logic.RemoveItem(item, false);
@@ -329,7 +329,7 @@ namespace ProjectSpotlight
 				}
 				catch (Exception ex)
 				{
-					var list = ex.Data["fails"] as System.Collections.Generic.List<Tuple<Item, Exception>>;
+					var list = ex.Data["fails"] as System.Collections.Generic.List<Tuple<Model, Exception>>;
 					var message = $"Could not move {list.Count} file(s):";
 
 					foreach (var tuple in list)
@@ -371,7 +371,7 @@ namespace ProjectSpotlight
 		private void DeleteButton_Click(object sender, RoutedEventArgs e)
 		{
 			//
-			RemoveItem(Carousel.SelectedItem as Item);
+			RemoveItem(Carousel.SelectedItem as Model);
 
 			//
 			if (App.Logic.NewItems.Count == 0)
@@ -391,7 +391,7 @@ namespace ProjectSpotlight
 			//
 			for (int i = App.Logic.NewItems.Count - 1; 0 <= i; i--)
 			{
-				Item item = App.Logic.NewItems[i];
+				Model item = App.Logic.NewItems[i];
 				if (item.ImageOrientation == orientation)
 					RemoveItem(item);
 			}
@@ -443,7 +443,7 @@ namespace ProjectSpotlight
 					break;
 
 				case System.Windows.Input.Key.Delete:
-					RemoveItem(Carousel.SelectedItem as Item);
+					RemoveItem(Carousel.SelectedItem as Model);
 					e.Handled = true;
 					break;
 
