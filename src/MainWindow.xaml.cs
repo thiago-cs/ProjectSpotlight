@@ -33,7 +33,7 @@ namespace ProjectSpotlight
 		#endregion Fields
 
 
-		public static ViewModel ViewModel { get; } = new ViewModel();
+		public static ViewModel ViewModel { get; } = new();
 
 
 		#region Constructor and MainWindow events
@@ -61,34 +61,34 @@ namespace ProjectSpotlight
 
 
 			// 2. Animations
-			Duration duration = new Duration(TimeSpan.FromMilliseconds(350));
+			Duration duration = new(TimeSpan.FromMilliseconds(350));
 
 			// 2.1. Fade in/out animations
-			backgroundBrushAnimation = new ColorAnimation(Colors.Transparent, duration, FillBehavior.HoldEnd);
+			backgroundBrushAnimation = new(Colors.Transparent, duration, FillBehavior.HoldEnd);
 			Storyboard.SetTarget(backgroundBrushAnimation, CarouselContainer);
-			Storyboard.SetTargetProperty(backgroundBrushAnimation, new PropertyPath("Background.Color"));
+			Storyboard.SetTargetProperty(backgroundBrushAnimation, new("Background.Color"));
 
 			// 2.2. Scale animations.
-			scaleXAnimation = new DoubleAnimation(0, duration, FillBehavior.HoldEnd);
+			scaleXAnimation = new(0, duration, FillBehavior.HoldEnd);
 			//Storyboard.SetTarget(scaleXAnimation, TheScaleTransform);
 			//Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath(ScaleTransform.ScaleXProperty));
 			Storyboard.SetTarget(scaleXAnimation, Carousel);
-			Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath("RenderTransform.Children[0].ScaleX"));
+			Storyboard.SetTargetProperty(scaleXAnimation, new("RenderTransform.Children[0].ScaleX"));
 
-			scaleYAnimation = new DoubleAnimation(0, duration, FillBehavior.HoldEnd);
+			scaleYAnimation = new(0, duration, FillBehavior.HoldEnd);
 			Storyboard.SetTarget(scaleYAnimation, Carousel);
-			Storyboard.SetTargetProperty(scaleYAnimation, new PropertyPath("RenderTransform.Children[0].ScaleY"));
+			Storyboard.SetTargetProperty(scaleYAnimation, new("RenderTransform.Children[0].ScaleY"));
 
 			// 2.3. Translation animation.
-			translateXAnimation = new DoubleAnimation(0, duration, FillBehavior.HoldEnd);
+			translateXAnimation = new(0, duration, FillBehavior.HoldEnd);
 			Storyboard.SetTarget(translateXAnimation, Carousel);
-			Storyboard.SetTargetProperty(translateXAnimation, new PropertyPath("RenderTransform.Children[1].X"));
+			Storyboard.SetTargetProperty(translateXAnimation, new("RenderTransform.Children[1].X"));
 
-			translateYAnimation = new DoubleAnimation(0, duration, FillBehavior.HoldEnd);
+			translateYAnimation = new(0, duration, FillBehavior.HoldEnd);
 			Storyboard.SetTarget(translateYAnimation, Carousel);
-			Storyboard.SetTargetProperty(translateYAnimation, new PropertyPath("RenderTransform.Children[1].Y"));
+			Storyboard.SetTargetProperty(translateYAnimation, new("RenderTransform.Children[1].Y"));
 
-			carouselStoryboard = new Storyboard();
+			carouselStoryboard = new();
 			carouselStoryboard.Children.Add(backgroundBrushAnimation);
 			carouselStoryboard.Children.Add(scaleXAnimation);
 			carouselStoryboard.Children.Add(scaleYAnimation);
@@ -133,14 +133,14 @@ namespace ProjectSpotlight
 					"Do you want to keep the new image found?" :
 					"Do you want to keep the new images found?";
 
-				var dialogSettings = new MetroDialogSettings
+				MetroDialogSettings dialogSettings = new()
 				{
 					AffirmativeButtonText = "Yes",
 					NegativeButtonText = "No",
 					DefaultButtonFocus = MessageDialogResult.Affirmative,
 				};
 
-				var result = await this.ShowMessageAsync(Title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+				MessageDialogResult result = await this.ShowMessageAsync(Title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
 
 				if (result == MessageDialogResult.Affirmative)
 				{
@@ -272,7 +272,7 @@ namespace ProjectSpotlight
 			}
 
 			//
-			FrameworkElement GetImageControl(DependencyObject element)
+			static FrameworkElement GetImageControl(DependencyObject element)
 			{
 				element = VisualTreeHelper.GetChild(element, 0);
 				element = VisualTreeHelper.GetChild(element, 0);
@@ -292,7 +292,8 @@ namespace ProjectSpotlight
 
 		private static Point GetElementOffset(Visual ancestor, FrameworkElement element)
 		{
-			return element.TransformToAncestor(ancestor).Transform(new Point(0, 0));
+			return element.TransformToAncestor(ancestor)
+						  .Transform(new(0, 0));
 		}
 
 		// Non-UI Methods
@@ -315,7 +316,7 @@ namespace ProjectSpotlight
 
 		private async Task SaveRemainingItemsAsync()
 		{
-			var dialogSettings = new MetroDialogSettings
+			MetroDialogSettings dialogSettings = new()
 			{
 				AffirmativeButtonText = "Try again",
 				NegativeButtonText = "Cancel",
@@ -335,12 +336,12 @@ namespace ProjectSpotlight
 
 					foreach (var tuple in list)
 					{
-						var item = tuple.Item1;
-						var exception = tuple.Item2;
+						Model item = tuple.Item1;
+						Exception exception = tuple.Item2;
 						message += "\n" + item.FileName + "\t" + exception.Message;
 					}
 
-					var result = await this.ShowMessageAsync(Title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+					MessageDialogResult result = await this.ShowMessageAsync(Title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
 
 					keepTrying = result == MessageDialogResult.Affirmative;
 				}
@@ -386,7 +387,7 @@ namespace ProjectSpotlight
 		private void DeleteGroupButton_Click(object sender, RoutedEventArgs e)
 		{
 			//
-			if (!(sender is Button button && button.Tag is ImageOrientation orientation))
+			if (sender is not Button button || button.Tag is not ImageOrientation orientation)
 				return;
 
 			//

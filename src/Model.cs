@@ -20,10 +20,10 @@ namespace ProjectSpotlight
 			FilePath = path;
 
 			// 
-			Image = new BitmapImage();
+			Image = new();
 			Image.BeginInit();
 			Image.CacheOption = BitmapCacheOption.OnLoad;
-			Image.UriSource = new Uri(path);
+			Image.UriSource = new(path);
 			Image.EndInit();
 
 			// 
