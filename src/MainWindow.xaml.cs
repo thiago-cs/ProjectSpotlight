@@ -33,6 +33,9 @@ namespace ProjectSpotlight
 		#endregion Fields
 
 
+		public static ViewModel ViewModel { get; } = new ViewModel();
+
+
 		#region Constructor and MainWindow events
 		public MainWindow()
 		{
@@ -41,10 +44,10 @@ namespace ProjectSpotlight
 
 			if (SmallPicturesContainer.ItemsSource == null)
 			{
-				CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(App.Logic.NewItems);
+				CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(ViewModel.NewItems);
 				view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Model.ImageOrientation)));
 
-				//SmallPicturesContainer.ItemsSource = App.Logic.NewItems;
+				//SmallPicturesContainer.ItemsSource = ViewModel.NewItems;
 				SmallPicturesContainer.ItemsSource = view;
 			}
 
@@ -98,13 +101,13 @@ namespace ProjectSpotlight
 		{
 			// 1. 
 #if SIMULATION_MODE
-			App.Logic.SimulateScavenge();
+			ViewModel.SimulateScavenge();
 #else
-			App.Logic.Scavenge();
+			ViewModel.Scavenge();
 #endif
 
 			// 2. ...
-			if (App.Logic.NewItems.Count == 0)
+			if (ViewModel.NewItems.Count == 0)
 			{
 				Text1.Visibility = Visibility.Visible;
 				Text1.Foreground = Brushes.Black;
@@ -122,11 +125,11 @@ namespace ProjectSpotlight
 			bool canClose = true;
 
 			// Is there any new images?
-			if (App.Logic.NewItems.Count != 0)
+			if (ViewModel.NewItems.Count != 0)
 			{
 				e.Cancel = true;
 
-				string message = App.Logic.NewItems.Count == 1 ?
+				string message = ViewModel.NewItems.Count == 1 ?
 					"Do you want to keep the new image found?" :
 					"Do you want to keep the new images found?";
 
@@ -141,9 +144,9 @@ namespace ProjectSpotlight
 
 				if (result == MessageDialogResult.Affirmative)
 				{
-					await SaveRemainingItems();
+					await SaveRemainingItemsAsync();
 
-					if (App.Logic.NewItems.Count != 0)
+					if (ViewModel.NewItems.Count != 0)
 						canClose = false;
 				}
 				else
@@ -162,8 +165,6 @@ namespace ProjectSpotlight
 
 
 		#region Methods
-		
-		// UI Methods
 
 		private void ShowCarousel()
 		{
@@ -299,11 +300,11 @@ namespace ProjectSpotlight
 		private static void RemoveItem(Model item)
 		{
 #if SIMULATION_MODE
-			App.Logic.RemoveItem(item, false);
+			ViewModel.RemoveItem(item, false);
 #else
 			try
 			{
-				App.Logic.RemoveItem(item, true);
+				ViewModel.RemoveItem(item, true);
 			}
 			catch (Exception ex)
 			{
@@ -312,7 +313,7 @@ namespace ProjectSpotlight
 #endif
 		}
 
-		private async Task SaveRemainingItems()
+		private async Task SaveRemainingItemsAsync()
 		{
 			var dialogSettings = new MetroDialogSettings
 			{
@@ -324,7 +325,7 @@ namespace ProjectSpotlight
 			bool keepTrying;
 			do try
 				{
-					App.Logic.GroupImagesByAspectRation();
+					ViewModel.GroupImagesByAspectRation();
 					keepTrying = false;
 				}
 				catch (Exception ex)
@@ -348,8 +349,8 @@ namespace ProjectSpotlight
 
 		private void DiscardRemainingItems()
 		{
-			for (int i = App.Logic.NewItems.Count - 1; i >= 0; i--)
-				RemoveItem(App.Logic.NewItems[i]);
+			for (int i = ViewModel.NewItems.Count - 1; i >= 0; i--)
+				RemoveItem(ViewModel.NewItems[i]);
 		}
 		#endregion Methods
 
@@ -374,7 +375,7 @@ namespace ProjectSpotlight
 			RemoveItem(Carousel.SelectedItem as Model);
 
 			//
-			if (App.Logic.NewItems.Count == 0)
+			if (ViewModel.NewItems.Count == 0)
 			{
 				HideCarouselControls();
 				Text1.Visibility = Visibility.Visible;
@@ -389,15 +390,15 @@ namespace ProjectSpotlight
 				return;
 
 			//
-			for (int i = App.Logic.NewItems.Count - 1; 0 <= i; i--)
+			for (int i = ViewModel.NewItems.Count - 1; 0 <= i; i--)
 			{
-				Model item = App.Logic.NewItems[i];
+				Model item = ViewModel.NewItems[i];
 				if (item.ImageOrientation == orientation)
 					RemoveItem(item);
 			}
 
 			//
-			if (App.Logic.NewItems.Count == 0)
+			if (ViewModel.NewItems.Count == 0)
 				Text1.Visibility = Visibility.Visible;
 		}
 
@@ -437,7 +438,7 @@ namespace ProjectSpotlight
 					break;
 
 				case System.Windows.Input.Key.PageDown:
-					if (Carousel.SelectedIndex < App.Logic.NewItems.Count - 1)
+					if (Carousel.SelectedIndex < ViewModel.NewItems.Count - 1)
 						Carousel.SelectedIndex++;
 					e.Handled = true;
 					break;

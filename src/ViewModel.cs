@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
-using System.Windows.Media.Imaging;
 using Microsoft.VisualBasic.FileIO;
 
 namespace ProjectSpotlight
 {
-	public class AppLogic
+	public class ViewModel
 	{
 		#region Fields
 		// Static data.
@@ -117,7 +116,7 @@ namespace ProjectSpotlight
 			var fileNames = Directory.GetFiles(rootDirectory, "*.jpg");
 
 			foreach (string fileName in fileNames)
-				App.Logic.NewItems.Add(new Model(fileName));
+				NewItems.Add(new Model(fileName));
 		}
 
 		public void GroupImagesByAspectRation()
@@ -180,11 +179,11 @@ namespace ProjectSpotlight
 
 		public void RemoveItem(Model item, bool removeFile)
 		{
-			if (item == null || !App.Logic.NewItems.Contains(item))
+			if (item == null || !NewItems.Contains(item))
 				return;
 
 			//
-			App.Logic.NewItems.Remove(item);
+			NewItems.Remove(item);
 
 			//
 			if (removeFile)
